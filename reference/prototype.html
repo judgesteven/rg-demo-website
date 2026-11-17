@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safer Play Rewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE work: a product concept shown to a lottery's responsible-gaming lead
+   IDEA a shipped player app beside the operator's own results desk
+   PICTURE the phone app, live and tappable; on the team tab, pilot vs comparison chart
+   COLOUR white ground, ink, coral for the player's own progress, cobalt for comparison
+   TYPE Sora display + Inter text
+   LAYOUT laptop: title and steps left, phone right; phone: title, app full-bleed, steps */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#101114);--ink:light-dark(#14161a,#eef0f3);--mute:light-dark(#555b68,#a6acb8);--line:light-dark(#e3e5e9,#2a2d33);--soft:light-dark(#f4f5f7,#181a1e);--card:light-dark(#ffffff,#1c1e23);--hero:light-dark(#14161a,#262930);--acc:light-dark(#e5432d,#ff6a52);--acc-soft:light-dark(#fde6e2,#3a1f1b);--blue:light-dark(#2f5bd3,#7c9bff);--blue-soft:light-dark(#e6ecfb,#1d2540);--grey:light-dark(#b9bdc6,#4a4e57);--good:light-dark(#1e7a46,#5cc98a);--good-soft:light-dark(#e3f3e9,#17301f)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;letter-spacing:-.02em;line-height:1.08;margin:0}
+h1{font-size:clamp(30px,4vw,46px);text-wrap:balance}
+h2{font-size:22px}
+button,input{font:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:14px max(5vw,16px);border-bottom:1px solid var(--line)}
+.brand{display:flex;flex-direction:column;margin-right:auto}
+.brand b{font-family:Sora,sans-serif;font-size:18px}
+.brand span{font-size:13px;color:var(--mute)}
+.tabs{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:999px}
+.tabs a{padding:10px 18px;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center}
+.tabs a[aria-current=page]{background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.opf{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mute)}
+.opf input{width:150px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:16px}
+.pl{display:grid;grid-template-columns:minmax(0,1fr) 400px;grid-template-areas:"head phone" "steps phone";gap:24px 64px;align-items:start}
+.head{grid-area:head;display:flex;flex-direction:column;gap:14px;padding-top:24px}
+.head p{margin:0;color:var(--mute);max-width:56ch;font-size:17px}
+.steps{grid-area:steps;list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.steps svg{width:44px;height:44px}
+.steps b{display:block;margin-bottom:2px}
+.steps span{color:var(--mute);font-size:15px}
+.note{font-size:13px;color:var(--mute);margin:0}
+.phone{grid-area:phone;justify-self:center;width:400px;padding:12px;border-radius:52px;background:#0c0d0f;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+.screen{height:800px;border-radius:40px;overflow-y:auto;background:var(--bg);scrollbar-width:none}
+.status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 6px;font-size:14px;font-weight:600}
+.status i{display:flex;gap:5px;align-items:center;font-style:normal}
+.app{padding:8px 18px 28px;display:flex;flex-direction:column;gap:18px}
+.ah{display:flex;justify-content:space-between;align-items:center}
+.ah small{display:block;font-size:13px;color:var(--mute)}
+.ah b{font-family:Sora,sans-serif;font-size:22px}
+.chip{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--acc-soft);color:var(--ink)}
+.toast{background:var(--good-soft);color:var(--ink);border:1px solid var(--good);border-radius:12px;padding:11px 14px;font-size:14px;font-weight:500}
+.pts{background:var(--hero);color:#fff;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.pts .n{font-family:Sora,sans-serif;font-size:46px;font-weight:700;line-height:1;color:#ff7a63}
+.pts small{color:#c9ccd3;font-size:14px}
+.bar{height:8px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:#ff7a63;transition:width .5s}
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec h3{font-size:18px}
+.chh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px}
+.chh span{font-weight:400;font-size:13px;color:var(--mute);white-space:nowrap}
+.m{border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;background:var(--card)}
+.m.lock{background:var(--soft)}
+.m .t{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.m .t span{color:var(--acc);font-size:13px;white-space:nowrap;font-weight:700}
+.m p{margin:0;font-size:14px;color:var(--mute);line-height:1.45}
+.m .f{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:44px}
+.tag{font-size:12px;font-weight:500;padding:4px 9px;border-radius:999px;background:var(--soft)}
+.tag.site{background:var(--blue-soft)}.tag.place{background:var(--good-soft)}
+.go{min-height:44px;padding:0 16px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);font-weight:600;font-size:14px;cursor:pointer}
+.go:hover{opacity:.88}
+.ok{color:var(--good);font-weight:600;font-size:14px}
+.box{border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--card);display:flex;flex-direction:column;gap:12px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mute)}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.cr{display:grid;grid-template-columns:88px minmax(0,1fr) 46px;gap:10px;align-items:center;font-size:13px}
+.cr .tr{height:10px;border-radius:999px;background:var(--soft);overflow:hidden}
+.cr .tr i{display:block;height:100%;border-radius:999px;transition:width .5s}
+.cr b{text-align:right;white-space:nowrap}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badges span{font-size:13px;padding:8px 12px;border-radius:999px;background:var(--soft);font-weight:500}
+.badges .on{background:var(--ink);color:var(--bg)}
+.fine{font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:12px;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px;margin:24px 0}
+.kpi{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.kpi b{font-family:Sora,sans-serif;font-size:clamp(30px,3vw,38px);line-height:1.05}
+.kpi span{color:var(--mute);font-size:14px}
+.kpi em{font-style:normal;font-size:14px;color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;margin-bottom:14px}
+.row>.main{flex:999 1 560px}
+.row>.side{flex:1 1 300px}
+.panel{border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.fig{position:relative;min-height:300px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+svg text{font:13px Inter,sans-serif;fill:var(--mute);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.dark{background:var(--hero);color:#fff;border:0}
+.dark p{color:#c9ccd3;margin:0;font-size:15px}
+.dark .vs{display:flex;gap:28px}
+.dark .vs b{display:block;font-family:Sora,sans-serif;font-size:36px;color:#ff7a63}
+.dark .vs b.c{color:#fff}
+.dark .vs span{font-size:14px;color:#c9ccd3}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-weight:500;font-size:13px;color:var(--mute);padding:8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid var(--line)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.feed{display:flex;flex-direction:column}
+.ev{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px;font-size:14px}
+.ev div{display:flex;justify-content:space-between;gap:8px}
+.ev code{font:600 13px ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
+.ev span{color:var(--mute);font-size:13px;white-space:nowrap}
+.ev.new{animation:flash 1.2s}
+@keyframes flash{from{background:var(--acc-soft)}to{background:transparent}}
+.live{display:flex;align-items:center;gap:6px;color:var(--good);font-weight:600;font-size:13px}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--good)}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:12px}
+footer{border-top:1px solid var(--line)}
+footer p{margin:0 auto;max-width:1240px;font-size:13px;color:var(--mute)}
+[hidden]{display:none!important}
+@media(max-width:900px){.pl{grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "phone" "steps";gap:24px}.head{padding-top:0}}
+@media(max-width:600px){.phone{width:auto;padding:0;border-radius:0;background:none;box-shadow:none;justify-self:stretch;margin:0 calc(-1 * max(5vw,16px))}.screen{height:auto;border-radius:0;overflow:visible}.status{display:none}.app{padding:4px 16px 20px}.opf input{width:130px}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0}.stack td::before{content:attr(data-l);color:var(--mute)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+<div class="brand"><b>Safer Play Rewards</b><span>A pilot concept by GameLayer</span></div>
+<nav class="tabs" aria-label="Views"><a href="#player" id="t-player">Player app</a><a href="#team" id="t-team">Team dashboard</a></nav>
+<label class="opf" for="op">Operator <input id="op" value="Your Lottery" autocomplete="off"></label>
+</header>
+
+<main>
+<section class="band" id="v-player">
+<div class="wrap pl">
+<div class="head">
+<h1>Players earn good-cause points for using safer-play tools</h1>
+<p>An opt-in programme that rewards checking your play, setting limits and taking the self-assessment. Never spending.</p>
+<p class="note">Sample data throughout. Tap a mission in the app to see how it works.</p>
+</div>
+<div class="phone"><div class="screen" id="app"></div></div>
+<ol class="steps">
+<li><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="12" fill="var(--acc-soft)"/><path d="M14 23l5 5 11-12" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Missions point to tools you already have</b><span>Play history, limits and the self-assessment stay in the player's account. Short quizzes and stories live on the pilot page.</span></div></li>
+<li><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="12" fill="var(--blue-soft)"/><path d="M12 22h8l3-7 4 14 3-7h4" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Confirmed in real time through the API</b><span>When a player uses a tool, the account sends one event with a pseudonymised ID. Their mission updates in under a second.</span></div></li>
+<li><svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="12" fill="var(--good-soft)"/><path d="M22 31s-9-5.5-9-11.5A5 5 0 0122 16a5 5 0 019 3.5C31 25.5 22 31 22 31z" fill="none" stroke="var(--good)" stroke-width="3" stroke-linejoin="round"/></svg><div><b>Rewards go to good causes</b><span>Points become donations in the player's name. No free plays, no bonus money, no ranking of individual players.</span></div></li>
+</ol>
+</div>
+</section>
+
+<section class="band" id="v-team" hidden>
+<div class="wrap">
+<h1>Pilot players use safer-play tools four times as often, with no rise in spend</h1>
+<p class="note" style="margin-top:10px"><span class="opn">Your Lottery</span> pilot, week 8 of 12. Comparison group: eligible players not invited. Sample data.</p>
+<div class="kpis" id="kpis"></div>
+<div class="row">
+<div class="panel main">
+<div class="ph"><h2>Self-assessments per 1,000 players, by week</h2><div class="leg"><span><i style="background:var(--acc)"></i>Pilot</span><span><i style="background:var(--blue)"></i>Comparison</span></div></div>
+<div class="fig"><svg id="chart" role="img" aria-label="Weekly self-assessments per 1,000 players: pilot rises from 12 to 61, comparison stays near 10"></svg></div>
+</div>
+<div class="panel side dark">
+<h2>Safety check</h2>
+<p>Average weekly spend per active player, against the four weeks before the pilot.</p>
+<div class="vs"><div><b>−3%</b><span>Pilot</span></div><div><b class="c">+1%</b><span>Comparison</span></div></div>
+<p style="border-top:1px solid rgba(255,255,255,.16);padding-top:12px">Guardrail: the pilot pauses if pilot spend rises more than 5% above the comparison group.</p>
+</div>
+</div>
+<div class="row">
+<div class="panel main">
+<h2>Missions</h2>
+<div class="scroll"><table class="stack"><thead><tr><th>Mission</th><th>Where</th><th class="n">Started</th><th class="n">Completed</th><th class="n">Confirmed in</th></tr></thead><tbody id="mt"></tbody></table></div>
+</div>
+<div class="panel side">
+<div class="ph"><h2>Live events</h2><span class="live"><i></i>Live</span></div>
+<p class="note">Each event arrives through the API and updates the player's missions straight away. Events from the player app tab appear here too.</p>
+<button class="go" id="sim" type="button">Simulate a player action</button>
+<div class="feed" id="feed"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="band"><p>All figures and names are sample data for illustration. The pilot only ever receives pseudonymised player IDs; no personal data leaves the operator.</p></footer>
+
+<script>
+{
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const st = {op:'Your Lottery', done:{reflect:1, history:1, odds:1, limit:1}, toast:'', n:0, fresh:0,
+  feed:[['limit_reviewed','14:32:08','7f3a…91c2','0.3 s'],['self_assessment_completed','14:31:55','2b81…0e7d','0.4 s'],['play_history_viewed','14:31:40','c904…5a13','0.3 s'],['play_history_viewed','14:31:12','58de…b6f0','0.2 s'],['self_assessment_completed','14:30:47','e17c…3d28','0.4 s']]};
+try { const o = localStorage.getItem('spr-op'); if (o) st.op = o; } catch (e) {}
+$('#op').value = st.op;
+const chapters = [
+  {t:'Chapter 1: Know your play', w:'Weeks 1–2', ms:[
+    {id:'reflect', t:'How do you like to play?', d:'Three quick questions about what makes playing fun for you.', at:'page', c:'Start'},
+    {id:'history', t:'Check your play history', d:'Open your play and spend summary in your account.', at:'site', c:'Open account', ev:'play_history_viewed'},
+    {id:'odds', t:'How the odds really work', d:'A five-question quiz with no wrong answers.', at:'page', c:'Take quiz'}]},
+  {t:'Chapter 2: Set your own boundaries', w:'Weeks 3–6', ms:[
+    {id:'limit', t:'Set or review a limit', d:'Look at your spend limit. Raise it, lower it or keep it: your call.', at:'site', c:'Review limit', ev:'limit_reviewed'},
+    {id:'assess', t:'Take the self-assessment', d:'A few minutes, in your account.', at:'site', c:'Start', ev:'self_assessment_completed'},
+    {id:'myths', t:'Myth-busters', d:'Six short cards on common beliefs about luck and winning.', at:'page', c:'Start'}]},
+  {t:'Chapter 3: Keep it fun', w:'Weeks 7–12', lock:1, ms:[
+    {id:'checkin', t:'Monthly check-in', d:'Another look at your play history, once a month.', at:'site'},
+    {id:'causes', t:'Where the money goes', d:'Stories from projects your play helps fund.', at:'page'},
+    {id:'visit', t:'Visit a funded project', d:'Check in at a local place supported by good causes.', at:'place'}]}
+];
+const where = at => at === 'site' ? 'In your ' + st.op + ' account' : at === 'place' ? 'Out and about' : 'On this page';
+const all = chapters.flatMap(c => c.ms);
+function app() {
+  const done = all.filter(m => st.done[m.id]);
+  const siteN = done.filter(m => m.at === 'site').length;
+  const pts = 140 + 50 * done.length;
+  const ch2 = chapters[1].ms.filter(m => st.done[m.id]).length;
+  const goal = 7420 + done.length - 4;
+  const row = (who, val, pct, col) => `<div class="cr"><span>${who}</span><div class="tr"><i style="width:${pct}%;background:${col}"></i></div><b>${val}</b></div>`;
+  const cmp = [
+    ['Safer-play tools used this month', [['You', siteN, Math.min(100, siteN * 25)], ['Pilot players', '2.4', 60], ['Everyone else', '0.6', 15]]],
+    ['Have taken the self-assessment', [['You', st.done.assess ? 'Yes' : 'Not yet', st.done.assess ? 100 : 0], ['Pilot players', '41%', 41], ['Everyone else', '9%', 9]]],
+    ['Have reviewed a limit', [['You', 'Yes', 100], ['Pilot players', '28%', 28], ['Everyone else', '6%', 6]]]
+  ];
+  const cols = ['var(--acc)', 'var(--blue)', 'var(--grey)'];
+  const b1 = chapters[0].ms.every(m => st.done[m.id]), b2 = ch2 === 3;
+  $('#app').innerHTML = `
+  <div class="status" aria-hidden="true"><span>9:41</span><i><svg width="18" height="12"><rect x="0" y="8" width="3" height="4" fill="currentColor"/><rect x="5" y="5" width="3" height="7" fill="currentColor"/><rect x="10" y="2" width="3" height="10" fill="currentColor"/><rect x="15" y="0" width="3" height="12" fill="currentColor"/></svg><svg width="26" height="12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="2" width="16" height="8" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg></i></div>
+  <div class="app">
+    <div class="ah"><div><small>${esc(st.op)}</small><b>Safer Play Rewards</b></div><span class="chip">Pilot</span></div>
+    ${st.toast ? `<div class="toast" role="status">${esc(st.toast)}</div>` : ''}
+    <div class="pts"><small>Hi Sam, your good-cause points</small><div class="n">${pts}</div><span>That's £${(pts / 100).toFixed(2)} donated in your name so far.</span>
+      <small style="display:flex;justify-content:space-between;margin-top:6px"><span>Chapter 2 of 3</span><span>${ch2} of 3 done</span></small><div class="bar"><i style="width:${ch2 / 3 * 100}%"></i></div></div>
+    ${chapters.map(c => `<div class="sec"><div class="chh">${c.t}<span>${c.w}</span></div>${c.ms.map(m => {
+      const d = st.done[m.id], lk = c.lock && !d;
+      return `<div class="m${lk ? ' lock' : ''}"><div class="t">${m.t}<span>+50 pts</span></div><p>${m.d}</p><div class="f"><span class="tag ${m.at}">${esc(where(m.at))}</span>${d ? '<span class="ok">Completed</span>' : lk ? '<span class="note">Opens in week 7</span>' : `<button class="go" type="button" data-m="${m.id}">${m.c}</button>`}</div></div>`;
+    }).join('')}</div>`).join('')}
+    <div class="box"><h3>You and other players</h3><div class="leg"><span><i style="background:var(--acc)"></i>You</span><span><i style="background:var(--blue)"></i>Pilot players</span><span><i style="background:var(--grey)"></i>Everyone else</span></div>
+      ${cmp.map(([l, rs]) => `<div class="sec" style="gap:6px"><b style="font-size:14px">${l}</b>${rs.map((r, i) => row(r[0], r[1], r[2], cols[i])).join('')}</div>`).join('')}</div>
+    <div class="box"><h3>Together</h3><span style="font-size:14px">${goal.toLocaleString('en-GB')} of 10,000 safer-play check-ins by pilot players.</span><div class="cr" style="grid-template-columns:minmax(0,1fr)"><div class="tr"><i style="width:${goal / 100}%;background:var(--acc)"></i></div></div><span class="note">At 10,000 the pilot unlocks a £10,000 donation to a good cause players vote for.</span></div>
+    <div class="sec"><h3>Badges</h3><div class="badges"><span class="${b1 ? 'on' : ''}">Know your play · ${b1 ? 'Earned' : 'In progress'}</span><span class="${b2 ? 'on' : ''}">Boundaries · ${b2 ? 'Earned' : 'In progress'}</span><span>Keep it fun · Week 7</span></div></div>
+    <p class="fine">Points are never free plays or bonus money, and no mission asks you to buy a ticket. You can leave the pilot at any time.</p>
+  </div>`;
+}
+const kpis = [['12,480', 'players in the pilot', '31% of 40,000 invited chose to join'], ['41%', 'have taken the self-assessment', 'vs 9% in the comparison group'], ['28%', 'have reviewed a limit', 'vs 6% in the comparison group'], ['2.4', 'safer-play tools used per player a month', 'vs 0.6 in the comparison group']];
+$('#kpis').innerHTML = kpis.map(k => `<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span><em>${k[2]}</em></div>`).join('');
+const rows = [['How do you like to play?', 'Pilot page', '88%', '81%', 'Instant'], ['Check your play history', 'Player account', '74%', '69%', '0.3 s'], ['How the odds really work', 'Pilot page', '71%', '64%', 'Instant'], ['Set or review a limit', 'Player account', '39%', '28%', '0.3 s'], ['Take the self-assessment', 'Player account', '52%', '41%', '0.4 s'], ['Myth-busters', 'Pilot page', '58%', '53%', 'Instant'], ['Monthly check-in', 'Player account', '22%', '19%', '0.3 s'], ['Where the money goes', 'Pilot page', '18%', '15%', 'Instant'], ['Visit a funded project', 'Location', '6%', '4%', '0.5 s']];
+const heads = ['Mission', 'Where', 'Started', 'Completed', 'Confirmed in'];
+$('#mt').innerHTML = rows.map(r => `<tr>${r.map((v, i) => `<td${i > 1 ? ' class="n"' : ''} data-l="${heads[i]}">${i === 3 ? '<b>' + v + '</b>' : v}</td>`).join('')}</tr>`).join('');
+function feed() {
+  $('#feed').innerHTML = st.feed.slice(0, 6).map((e, i) => `<div class="ev${i < st.fresh ? ' new' : ''}"><div><code>${e[0]}</code><span>${e[1]}</span></div><span>Player ${esc(e[2])} · mission updated in ${e[3]}</span></div>`).join('');
+  st.fresh = 0;
+}
+const pad = x => String(x).padStart(2, '0');
+function addEvent(name, player) {
+  const d = new Date(), hex = '0123456789abcdef';
+  const id = player || Array.from({length: 8}, (_, i) => hex[(st.n * 7 + i * 5 + 3) % 16]).join('').replace(/^(....)/, '$1…');
+  st.feed.unshift([name, pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()), id, (0.2 + (st.n % 3) / 10).toFixed(1) + ' s']);
+  st.n++; st.fresh = 1; feed();
+}
+let tt;
+$('#app').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  const m = all.find(x => x.id === b.dataset.m); if (!m || st.done[m.id]) return;
+  st.done[m.id] = 1;
+  st.toast = m.at === 'site' ? 'Confirmed by ' + st.op + ' in 0.4 seconds. +50 good-cause points' : '+50 good-cause points';
+  if (m.ev) addEvent(m.ev, 'Sam (this demo)');
+  app(); clearTimeout(tt); tt = setTimeout(() => { st.toast = ''; app(); }, 3500);
+});
+$('#sim').addEventListener('click', () => addEvent(['self_assessment_completed', 'limit_reviewed', 'play_history_viewed'][st.n % 3]));
+$('#op').addEventListener('input', e => {
+  st.op = e.target.value.trim() || 'Your Lottery';
+  try { localStorage.setItem('spr-op', st.op); } catch (err) {}
+  document.querySelectorAll('.opn').forEach(n => n.textContent = st.op); app();
+});
+const pilot = [12, 38, 44, 51, 47, 55, 58, 61], comp = [9, 10, 8, 11, 9, 10, 12, 10];
+const s = $('#chart');
+const draw = () => {
+  const W = s.clientWidth, H = s.clientHeight; if (!W) return;
+  const L = 34, R = W < 520 ? 70 : 96, T = 16, B = 30, max = 70;
+  const x = i => L + i * (W - L - R) / 7, y = v => T + (H - T - B) * (1 - v / max);
+  const line = (d, col) => `<polyline points="${d.map((v, i) => x(i) + ',' + y(v)).join(' ')}" fill="none" stroke="${col}" stroke-width="3" stroke-linejoin="round"/>${d.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${col}"/>`).join('')}`;
+  const ticks = [0, 20, 40, 60].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join('');
+  const wk = pilot.map((_, i) => (W < 520 && i % 2) ? '' : `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${W < 520 ? i + 1 : 'Wk ' + (i + 1)}</text>`).join('');
+  s.innerHTML = ticks + wk + line(comp, 'var(--blue)') + line(pilot, 'var(--acc)') +
+    `<text x="${x(7) + 10}" y="${y(61) + 4}" style="fill:var(--ink);font-weight:600">Pilot 61</text><text x="${x(7) + 10}" y="${y(10) + 4}" style="fill:var(--ink);font-weight:600">Comp. 10</text>`;
+};
+new ResizeObserver(draw).observe(s);
+function route() {
+  const v = location.hash === '#team' ? 'team' : 'player';
+  $('#v-player').hidden = v !== 'player'; $('#v-team').hidden = v !== 'team';
+  $('#t-player').toggleAttribute('aria-current', v === 'player'); $('#t-team').toggleAttribute('aria-current', v === 'team');
+  if (v === 'player') $('#t-player').setAttribute('aria-current', 'page'); else $('#t-team').setAttribute('aria-current', 'page');
+  draw();
+}
+window.addEventListener('hashchange', route);
+document.querySelectorAll('.opn').forEach(n => n.textContent = st.op);
+app(); feed(); route();
+}
+</script>
+</body>
+</html>
