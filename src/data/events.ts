@@ -36,3 +36,15 @@ export const toolEvents: EventName[] = ['play_history_viewed', 'limit_reviewed',
 /** How many events the mock keeps and the feed shows. */
 export const EVENT_HISTORY = 50;
 export const FEED_LENGTH = 6;
+
+/**
+ * Colour of each event in the live feed, matching where it happens:
+ * account tools in cobalt, out-and-about in green, leaving the pilot in grey.
+ */
+export const eventTone: Record<EventName, 'account' | 'place' | 'neutral'> = {
+  play_history_viewed: 'account',
+  limit_reviewed: 'account',
+  self_assessment_completed: 'account',
+  location_checkin: 'place',
+  player_excluded: 'neutral',
+};

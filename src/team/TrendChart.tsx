@@ -55,6 +55,15 @@ export function TrendChart() {
               Week
             </text>
           )}
+          {series.map((s) => {
+            const floor = series.find((o) => o.id === s.areaTo);
+            const lower = floor ? floor.values : s.values.map(() => 0);
+            const top = s.values.map((v, i) => `${x(i)},${y(v)}`);
+            const bottom = lower.map((v, i) => `${x(i)},${y(v)}`).reverse();
+            return (
+              <polygon key={`${s.id}-area`} points={[...top, ...bottom].join(' ')} fill={s.color} fillOpacity={0.12} />
+            );
+          })}
           {[...series].reverse().map((s) => (
             <g key={s.id}>
               <polyline

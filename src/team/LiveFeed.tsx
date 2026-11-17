@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { backend, type EventName, type RewardsEvent } from '../backend';
-import { FEED_LENGTH, simulateOptions } from '../data/events';
+import { FEED_LENGTH, eventTone, simulateOptions } from '../data/events';
 import { demoPlayer } from '../data/player';
 import { randomHex } from '../lib/ids';
 import { formatTime, shortId } from '../lib/format';
@@ -59,14 +59,17 @@ export function LiveFeed({ changeText }: { changeText: string | null }) {
           </button>
         </div>
         <p className="simulate-result" role="status">
-          {changeText ?? 'Updates the figures on this page.'}
+          {changeText}
         </p>
       </div>
 
       <ol className="feed">
         {events.map((e) => (
           <li key={e.id} className={e.playerId === demoPlayer.id ? 'ev is-demo' : 'ev'}>
-            <code>{e.name}</code>
+            <code>
+              <i className={`ev-dot ev-${eventTone[e.name]}`} aria-hidden="true" />
+              {e.name}
+            </code>
             <span>
               <time dateTime={e.occurredAt}>{formatTime(e.occurredAt)}</time> · Player {shortId(e.playerId)}
               {e.playerId === demoPlayer.id && ' (player app)'}

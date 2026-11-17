@@ -21,6 +21,7 @@
   --blue: #2f5bd3;         /* cobalt: comparisons */
   --blue-soft: #e6ecfb;
   --grey: #b9bdc6;         /* everyone else */
+  --chart-comp: #9ba0aa;   /* comparison line on the team chart */
   --good: #1e7a46;
   --good-soft: #e3f3e9;
 
@@ -28,6 +29,7 @@
   --hero-ink: #ffffff;
   --hero-mute: #c9ccd3;
   --hero-acc: #ff7a63;
+  --hero-blue: #8fa8ff;
   --hero-track: rgba(255, 255, 255, 0.16);
 
   --bezel: #0c0d0f;
@@ -59,6 +61,7 @@
     --blue: #7c9bff;
     --blue-soft: #1d2540;
     --grey: #5a5f69;
+    --chart-comp: #6f747e;
     --good: #5cc98a;
     --good-soft: #17301f;
 
@@ -562,19 +565,39 @@ button, input { font: inherit; color: inherit; }
   flex-direction: column;
   gap: 6px;
   padding: 20px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--hero);
   border-radius: var(--radius);
-  background: var(--card);
+  background: var(--hero);
+  color: var(--hero-ink);
 }
 .kpi b {
+  color: var(--hero-acc);
   font-family: var(--font-head);
   font-size: clamp(32px, 3vw, 40px);
   line-height: 1.05;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
-.kpi span { color: var(--mute); font-size: 15px; }
-.kpi em { font-style: normal; font-size: 15px; }
+.kpi span { color: var(--hero-mute); font-size: 15px; }
+.kpi em {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--hero-track);
+  font-style: normal;
+  font-size: 15px;
+}
+.kpi em.is-comparison::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hero-blue);
+  transform: translateY(-1px);
+}
 
 .row { display: flex; flex-wrap: wrap; align-items: stretch; gap: 14px; margin-bottom: 14px; }
 .row > .main { flex: 999 1 560px; }
@@ -690,9 +713,9 @@ button, input { font: inherit; color: inherit; }
   background: var(--soft);
 }
 .simulate label { font-weight: 600; font-size: 15px; }
-.simulate-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.simulate-row { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .simulate-row select {
-  flex: 1 1 180px;
+  align-self: stretch;
   min-height: var(--tap);
   padding: 0 36px 0 12px;
   border: 1px solid var(--line);
@@ -706,14 +729,15 @@ button, input { font: inherit; color: inherit; }
   appearance: none;
 }
 .simulate-row .btn { margin-left: 0; flex: none; }
-.simulate-result { font-size: 14px; color: var(--mute); }
+.simulate-result { font-size: 14px; color: var(--mute); text-align: center; }
+.simulate-result:empty { position: absolute; }
 
 /* A changed figure is tinted until the next update clears it (no motion). */
-.kpi.is-updated { border-color: var(--acc); background: var(--acc-soft); }
+.kpi.is-updated { border-color: var(--hero-acc); box-shadow: inset 0 0 0 1px var(--hero-acc); }
+.kpi.is-updated { background: color-mix(in srgb, var(--hero) 82%, var(--hero-acc)); }
 .results tr.is-updated > * { background: var(--acc-soft); }
 
 .source { font-size: 13px; color: var(--mute); }
-.pause-note { font-size: 15px; padding-top: 12px; border-top: 1px solid var(--line); }
 .cmp-source { font-size: 13px; color: var(--mute); }
 
 /* ---------- Player badges ---------- */
@@ -821,3 +845,31 @@ button, input { font: inherit; color: inherit; }
   font-size: 15px;
   color: var(--mute);
 }
+
+/* ---------- Team: colour accents ---------- */
+
+/* Completed bar in its own narrow column, centred between Started and Completed */
+/*
+ * Started, Completed and Completions sit on an even rhythm: equal-width centred
+ * columns, the bar centred in the gap between the first two, and the same gap
+ * again before Completions.
+ */
+.results { --num-w: 96px; --bar-w: 100px; --bar-pad: 14px; }
+.cell-bar { display: inline-block; width: var(--bar-w); vertical-align: middle; }
+@media (min-width: 601px) {
+  .results .col-num { width: var(--num-w); padding-left: 0; padding-right: 0; text-align: center; }
+  .results .bar-cell { width: var(--bar-w); padding-left: var(--bar-pad); padding-right: var(--bar-pad); }
+  .results .col-last { padding-left: calc(var(--bar-w) + 2 * var(--bar-pad)); }
+}
+.cell-bar .track { height: 8px; }
+@media (max-width: 600px) {
+  .results td.bar-cell { display: block; width: auto; padding: 6px 0 2px; }
+  .results td.bar-cell::before { content: none; }
+  .results td.bar-cell .cell-bar { width: 100%; }
+}
+
+.ev code { display: inline-flex; align-items: center; gap: 8px; }
+.ev-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.ev-account { background: var(--blue); }
+.ev-place { background: var(--good); }
+.ev-neutral { background: var(--chart-comp); }

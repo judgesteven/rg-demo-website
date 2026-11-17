@@ -18,6 +18,8 @@ export type Kpi = {
   id: string;
   label: string;
   context: string;
+  /** True when `context` is a comparison-group figure (shown with a cobalt dot). */
+  comparison?: boolean;
 } & (
   | { source: 'players' }
   | { source: 'mission'; missionId: string }
@@ -26,9 +28,9 @@ export type Kpi = {
 
 export const kpis: Kpi[] = [
   { id: 'joined', source: 'players', label: 'players in the pilot', context: '31% of 40,000 invited chose to join' },
-  { id: 'assess', source: 'mission', missionId: 'assess', label: 'have taken the self-assessment', context: 'vs 9% in the comparison group' },
-  { id: 'limit', source: 'mission', missionId: 'limit', label: 'have reviewed a limit', context: 'vs 6% in the comparison group' },
-  { id: 'tools', source: 'fixed', value: 2.4, label: 'safer-play tools used per player a month', context: 'vs 0.6 in the comparison group' },
+  { id: 'assess', source: 'mission', missionId: 'assess', label: 'have taken the self-assessment', context: 'vs 9% in the comparison group', comparison: true },
+  { id: 'limit', source: 'mission', missionId: 'limit', label: 'have reviewed a limit', context: 'vs 6% in the comparison group', comparison: true },
+  { id: 'tools', source: 'fixed', value: 2.4, label: 'safer-play tools used per player a month', context: 'vs 0.6 in the comparison group', comparison: true },
 ];
 
 /** How long a changed KPI or table row stays highlighted. */
@@ -39,9 +41,13 @@ export const weeklyChart = {
   title: 'Self-assessments per 1,000 players, by week',
   yMax: 70,
   yTicks: [0, 20, 40, 60],
+  /**
+   * `areaTo` tints below each line: down to another series (a band between the
+   * two lines) or down to the axis.
+   */
   series: [
-    { id: 'pilot', label: 'Pilot', shortLabel: 'Pilot', color: 'var(--acc)', values: [12, 38, 44, 51, 47, 55, 58, 61] },
-    { id: 'comparison', label: 'Comparison', shortLabel: 'Comp.', color: 'var(--blue)', values: [9, 10, 8, 11, 9, 10, 12, 10] },
+    { id: 'pilot', label: 'Pilot', shortLabel: 'Pilot', color: 'var(--acc)', areaTo: 'comparison', values: [12, 38, 44, 51, 47, 55, 58, 61] },
+    { id: 'comparison', label: 'Comparison', shortLabel: 'Comp.', color: 'var(--blue)', areaTo: 'axis', values: [9, 10, 8, 11, 9, 10, 12, 10] },
   ],
 };
 
@@ -62,9 +68,4 @@ export const missionResults: { missionId: string; startedPct: number; completedP
   { missionId: 'visit', startedPct: 6, completedPct: 4 },
 ];
 
-export const teamWhereLabels = {
-  page: 'Pilot page',
-  account: 'Player account',
-  place: 'Location',
-} as const;
 

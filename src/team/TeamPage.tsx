@@ -8,11 +8,11 @@ import {
   missionResults,
   pilotMeta,
   teamTitle,
-  teamWhereLabels,
   weeklyChart,
   type Kpi,
 } from '../data/team';
 import { formatInt } from '../lib/format';
+import { Bar } from '../components/Bar';
 import { TrendChart } from './TrendChart';
 import { LiveFeed } from './LiveFeed';
 
@@ -118,7 +118,7 @@ export function TeamPage() {
                     {k.label}
                     {v.count !== undefined && ` (${formatInt(v.count)} players)`}
                   </span>
-                  <em>{k.context}</em>
+                  <em className={k.comparison ? 'is-comparison' : undefined}>{k.context}</em>
                 </li>
               );
             })}
@@ -141,7 +141,6 @@ export function TeamPage() {
             </div>
             <TrendChart />
             <p className="source">Pilot: GameLayer. Comparison: {name} reporting.</p>
-            <p className="pause-note">{name} can pause the pilot at any time against its own safer-gambling measures.</p>
           </section>
         </div>
 
@@ -153,10 +152,12 @@ export function TeamPage() {
                 <thead>
                   <tr>
                     <th scope="col">Mission</th>
-                    <th scope="col">Where</th>
-                    <th scope="col" className="num">Started</th>
-                    <th scope="col" className="num">Completed</th>
-                    <th scope="col" className="num">Completions</th>
+                    <th scope="col" className="num col-num">Started</th>
+                    <th scope="col" className="bar-cell">
+                      <span className="visually-hidden">Completed, as a bar</span>
+                    </th>
+                    <th scope="col" className="num col-num">Completed</th>
+                    <th scope="col" className="num col-num col-last">Completions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -167,10 +168,16 @@ export function TeamPage() {
                     return (
                       <tr key={r.missionId} className={change?.missionIds.includes(m.id) ? 'is-updated' : undefined}>
                         <th scope="row" data-label="Mission">{m.title}</th>
-                        <td data-label="Where">{teamWhereLabels[m.where]}</td>
-                        <td className="num" data-label="Started">{r.startedPct}%</td>
-                        <td className="num" data-label="Completed"><b>{pct(completions, stats.players)}%</b></td>
-                        <td className="num" data-label="Completions">{formatInt(completions)}</td>
+                        <td className="num col-num" data-label="Started">{r.startedPct}%</td>
+                        <td className="bar-cell" aria-hidden="true">
+                          <span className="cell-bar">
+                            <Bar pct={pct(completions, stats.players)} color="var(--acc)" />
+                          </span>
+                        </td>
+                        <td className="num col-num" data-label="Completed">
+                          <b>{pct(completions, stats.players)}%</b>
+                        </td>
+                        <td className="num col-num col-last" data-label="Completions">{formatInt(completions)}</td>
                       </tr>
                     );
                   })}
