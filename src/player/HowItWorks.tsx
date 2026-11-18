@@ -1,20 +1,38 @@
 import { howItWorks, type HowItWorksStep } from '../data/howItWorks';
 
 const icons: Record<HowItWorksStep['icon'], { bg: string; fg: string; path: JSX.Element }> = {
-  check: {
+  rocket: {
     bg: 'var(--acc-soft)',
     fg: 'var(--acc)',
-    path: <path d="M14 23l5 5 11-12" />,
+    path: (
+      <>
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </>
+    ),
   },
-  pulse: {
+  code: {
     bg: 'var(--blue-soft)',
     fg: 'var(--blue)',
-    path: <path d="M12 22h8l3-7 4 14 3-7h4" />,
+    path: (
+      <>
+        <path d="M16 18l6-6-6-6" />
+        <path d="M8 6l-6 6 6 6" />      </>
+    ),
   },
-  heart: {
+  gift: {
     bg: 'var(--good-soft)',
     fg: 'var(--good)',
-    path: <path d="M22 31s-9-5.5-9-11.5A5 5 0 0122 16a5 5 0 019 3.5C31 25.5 22 31 22 31z" />,
+    path: (
+      <>
+        <rect x="3" y="8" width="18" height="4" rx="1" />
+        <path d="M12 8v13" />
+        <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+        <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
+      </>
+    ),
   },
 };
 
@@ -31,7 +49,7 @@ export function HowItWorks() {
             <li key={step.title}>
               <svg viewBox="0 0 44 44" aria-hidden="true">
                 <rect width="44" height="44" rx="12" fill={icon.bg} />
-                <g fill="none" stroke={icon.fg} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <g transform="translate(10 10)" fill="none" stroke={icon.fg} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {icon.path}
                 </g>
               </svg>

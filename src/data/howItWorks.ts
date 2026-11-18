@@ -1,5 +1,5 @@
 export interface HowItWorksStep {
-  icon: 'check' | 'pulse' | 'heart';
+  icon: 'rocket' | 'code' | 'gift';
   title: string;
   body: string;
 }
@@ -11,17 +11,17 @@ export const playerIntro = {
 
 export const howItWorks: HowItWorksStep[] = [
   {
-    icon: 'check',
+    icon: 'rocket',
     title: 'Missions point to tools you already have',
     body: "Play history, limits and the self-assessment stay in the player's account. Short quizzes and stories live on the pilot page. The operator decides which tools and missions are included, agreed during the concept phase.",
   },
   {
-    icon: 'pulse',
+    icon: 'code',
     title: 'Confirmed in real time through the API',
     body: 'When a player uses a tool, the account sends one event with a pseudonymised ID. Their mission updates in real time over the API.',
   },
   {
-    icon: 'heart',
+    icon: 'gift',
     title: 'Rewards go to good causes',
     body: "Points become donations in the player's name. No free plays, no bonus money, no ranking of individual players. This is one option: points can also go towards real prizes. The operator decides, agreed during the concept phase.",
   },
