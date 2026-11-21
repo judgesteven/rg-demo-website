@@ -18,7 +18,7 @@ export const howItWorks: HowItWorksStep[] = [
   {
     icon: 'code',
     title: 'One event per action, no personal data',
-    body: 'When a player uses a tool, your platform sends GameLayer a single event with a pseudonymised ID. Nothing else is shared. Their mission progress updates instantly in the pilot portal.',
+    body: 'When a player uses a tool, your platform sends GameLayer a single event with a pseudonymised ID. Nothing else is shared. Their mission progress, points balance and badge unlocks update instantly in the pilot portal.',
   },
   {
     icon: 'gift',
