@@ -23,7 +23,7 @@ export const howItWorks: HowItWorksStep[] = [
   {
     icon: 'gift',
     title: 'Rewards go to good causes',
-    body: "Points become donations in the player's name. No free plays, no bonus money, no ranking of individual players. This is just one option: points can also go towards real prizes. The operator decides on what and how much to reward.",
+    body: "Points become donations in the player's name. No free plays, no bonus money, no ranking of individual players. This is just one option: points can also go towards real prizes. Operator decides on what and how much to reward.",
   },
 ];
 
